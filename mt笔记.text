@@ -1,0 +1,11 @@
+###
+1.页面报错 nuxt HTMLElement is not defined
+    修改 nuxt.config.js 中 plugins { src: '@/plugins/element-ui', ssr: false}
+2.server.js 不支持 es6 中 SyntaxError: Unexpected token import
+    启动项配置 --exec babel-node 安装 babel-preset-es2015
+报错 'babel-node' 不是内部或外部命令
+    安装 babel-cli
+3.lang="scss" 编译报错
+    安装 两个和vue 相关的包 sass-loader 和 node-sass
+4.编译警告  SKIPPING OPTIONAL DEPENDENCY: fsevents@1.2.9
+    window 不支持 fsevents, package-lock 删掉 fsevents
