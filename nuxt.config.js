@@ -45,6 +45,7 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios' // 请求地址
   ],
 
   /*

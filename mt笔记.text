@@ -9,3 +9,17 @@
     安装 两个和vue 相关的包 sass-loader 和 node-sass
 4.编译警告  SKIPPING OPTIONAL DEPENDENCY: fsevents@1.2.9
     window 不支持 fsevents, package-lock 删掉 fsevents
+5.发送验证码 配置qq邮件客户端
+6.查看安装包版本 npm ls 包名
+7.时间戳转化 10位秒时间戳getLocalTime(1293072805)
+            13位毫秒时间戳 new Date(1558625907040)
+8.切到桌面 window+d, 打开我的电脑 window+e , 右击开始 window+x, d打开cmd window+r
+9.登录页面 获取 user 
+    异步获取 mounted 钩子函数
+    和vuex
+10.clearInterval(self.timerid) // 清除定时器但 self.timerid 还在要清0
+11.<nuxt> 组件
+    该组件只适用于在布局中显示页面组件（即非布局内容）
+12.layout 属性
+    layouts 根目录下的所有文件都属于个性化布局文件，可以在页面组件中利用 layout 属性来引用。默认值 'default'
+    

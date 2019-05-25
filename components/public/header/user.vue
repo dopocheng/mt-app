@@ -20,8 +20,22 @@
 export default {
     data () {
         return{
-        user: '' 
+            user: '' 
         }
+    },
+    mounted: function() {
+        this.$axios.get('/users/getUser').then(({status, data:{user,info}}) =>{
+            // console.log('11111',user)
+            if(status === 200){
+                if(user){
+                    this.user = user
+                }else{
+                    console.log('获取user失败'+ info)
+                }
+            }else{
+                console.log('获取用户信息失败' + status)
+            }
+        }) 
     }
 }
 </script>
