@@ -11,6 +11,8 @@ import json from 'koa-json' // 处理数据格式 美观
 import dbConfig from './dbs/config'
 import passport from './interface/untils/passport'
 import users from './interface/users'
+import geo from './interface/geo'
+import search from './interface/search'
 
 const app = new Koa()
 // 配置 session
@@ -57,6 +59,8 @@ async function start() {
   }
 // 定义路由
   app.use(users.routes()).use(users.allowedMethods())// 放其他地方可能失效
+  app.use(geo.routes()).use(geo.allowedMethods())
+  app.use(search.routes()).use(search.allowedMethods())
   app.use(ctx => {
     ctx.status = 200
     ctx.respond = false // Bypass Koa's built-in response handling

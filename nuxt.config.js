@@ -3,6 +3,7 @@ const pkg = require('./package')
 
 module.exports = {
   mode: 'universal',
+ 
 
   /*
   ** Headers of the page

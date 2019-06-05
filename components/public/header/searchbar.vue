@@ -15,15 +15,18 @@
                     <el-input 
                         v-model="search" 
                         placeholder="搜索商家或地点"
-                        @focus="focus" @blur="blur"/>
+                        @focus="focus" 
+                        @blur="blur"
+                        @input="input"/>
                     <button class="el-button el-button--primary"><i class="el-icon-search"/></button>
                     <dl class="hotPlace" v-if="isHotPlace">
                         <dt>热门搜索</dt>
-                        <dd v-for="(item, idx) in hotPlace" :key="idx">{{ item }}</dd>
+                        <!-- <dd v-for="(item, idx) in hotPlace" :key="idx">{{ item.name }}</dd> -->
+                        <dd v-for="(item, idx) in  $store.state.home.hotPlace.slice(0,5)" :key="idx">{{ item.name }}</dd>
                     </dl>
                     <dl class="searchList" v-if="isSearchList">
                         <dt>酒店住宿</dt> 
-                        <dd v-for="(item, idx) in searchList" :key="idx">{{ item }}</dd>
+                        <dd v-for="(item, idx) in searchList" :key="idx">{{ item.name }}</dd>
                     </dl>
                 </div>
                 <p class="suggset">
@@ -66,13 +69,14 @@
 </template>
 
 <script>
+import _ from 'lodash'
     export default {
         data () {
             return {
                 search: '',
                 isFocus: false,
-                hotPlace: ['砂之船', '砂之船', '砂之船', '砂之船'],
-                searchList: ['假日酒店', '假日酒店', '假日酒店', '假日酒店']
+                hotPlace: [],
+                searchList: []
             }
         },
 
@@ -87,13 +91,35 @@
         methods: {
             focus:function() {
                 this.isFocus = true
+                let city = this.$store.state.geo.position.city.replace('市', '')
+                this.hotPlace = []
+                // console.log('前端整合 hotPlace', city)
+                this.$axios.get('/search/hotPlace', {params:{city}}).then(({status, data: {hotPlace}}) => {// 异步渲染dom 最好是 ssr 方式
+                    if(status === 200) {
+                        this.hotPlace = hotPlace.slice(0,5)
+                    } else {
+                        console.log('请求api失败', status)
+                    }
+                })
             },
             blur:function() {
                 let self = this
                 setTimeout(function() {
                     return self.isFocus = false
                 },200)
-            }
+            },
+            input: _.debounce(async function() {
+                let self = this
+                let city = self.$store.state.geo.position.city.replace('市','')
+                self.searchList = []
+                let {status, data: {top}} = await self.$axios.get('/search/top', {
+                    params: {
+                        input: self.search,
+                        city
+                    }
+                })
+                self.searchList = top.slice(0,10)
+            }, 300)
         }
     }
 </script>

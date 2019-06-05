@@ -1,6 +1,6 @@
 <template>
     <section class="m-istyle">
-        <dl >
+        <dl @mousemove="over">
             <dt>有格调</dt>
             <dd
                 :class="{active:kind==='all'}"
@@ -15,11 +15,11 @@
                 kind="spa"
                 keyword="丽人">丽人SPA</dd>
             <dd
-                :class="{active:kind='movie'}"
+                :class="{active:kind==='movie'}"
                 kind="movie"
                 keyword="电影">电影演出</dd>
             <dd
-                :class="{active:kind='travel'}"
+                :class="{active:kind==='travel'}"
                 kind="travel"
                 keyword="旅游">品质出游</dd>
         </dl>
@@ -50,31 +50,7 @@ export default {
         return {
             kind: 'all',
             list: {
-                all: [{
-                    title: '吉山尚合酒店',
-                    pos: '酒店周边',
-                    price: '530',
-                    img: '//p1.meituan.net/tdchotel/836bb3e109b1c705d2e5f50d9bff70dc9820182.jpg@368w_208h_1e_1c',
-                    url: '//abc.com'
-                }, {
-                    title: '耀莱国际影城',
-                    pos: '免押金，可停车',
-                    price: Math.ceil(Math.random() * 400),
-                    img: '//p1.meituan.net/tdchotel/836bb3e109b1c705d2e5f50d9bff70dc9820182.jpg@368w_208h_1e_1c',
-                    url: '//abc.com'
-                }, {
-                    title: '三只耳河鲜馆',
-                    pos: '双人套餐',
-                    price: '520',
-                    img: '//p1.meituan.net/tdchotel/836bb3e109b1c705d2e5f50d9bff70dc9820182.jpg@368w_208h_1e_1c',
-                    url: '//abc.com'
-                }, {
-                    title: '良子健身',
-                    pos: '良子健身',
-                    price: '510',
-                    img: '//p1.meituan.net/tdchotel/836bb3e109b1c705d2e5f50d9bff70dc9820182.jpg@368w_208h_1e_1c',
-                    url: '//abc.com'
-                }],
+                all: [],
                 part: [],
                 spa: [],
                 movie: [],
@@ -85,14 +61,63 @@ export default {
 
     computed: {
     cur: function () {
-      return this.list['all']
+      return this.list[this.kind]
     }
   },
-
-  methods: {
-      over: function() {
-
+  async mounted(){
+    let self=this;
+    let {status,data:{count,pois}}=await self.$axios.get('/search/resultsByKeywords',{
+      params:{
+        keyword:'景点',
+        city:self.$store.state.geo.position.city
       }
+    })
+    if(status===200&&count>0){
+      let r= pois.filter(item=>item.photos.length).map(item=>{
+        return {
+          title:item.name,
+          pos:item.type.split(';')[0],
+          price:item.biz_ext.cost||'暂无',
+          img:item.photos[0].url,
+          url:'//abc.com'
+        }
+      })
+      self.list[self.kind]=r.slice(0,9)
+    }else{
+      self.list[self.kind]=[]
+    }
+  },
+  methods: {
+    over: async function(e) {
+        let dom = e.target
+        let tag = dom.tagName.toLowerCase() // 字符串转小写
+        let self = this
+        if(tag = 'dd') {
+            this.kind = dom.getAttribute('kind')
+            let keyword = dom.getAttribute('keyword')
+            let {status, data:{count,pois}} =await self.$axios.get('search/resultsByKeywords',{
+                params: {
+                    city:self.$store.state.geo.position.city,
+                    keyword
+                }
+            })
+            console.log('over:',status, pois)
+            if(status === 200 && count > 0) {
+               let r = pois.filter(item=>item.photos.length).map(item=>{// 过滤出有图片项 重新设置前端所想的属性便于随后端修改
+                   return{
+                       title: item.name,
+                       pos: item.type.split(';')[0],
+                       price: item.biz_ext.cost||'暂无',
+                       img: item.photos[0].url,
+                       url: '//abc.com'
+                   }
+               })
+               self.list[self.kind] = r.slice(0,5)
+            } else {
+                self.list[self.kind] = []
+            }
+        }
+    }
   }
 }
 </script>

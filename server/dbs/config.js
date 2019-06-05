@@ -16,7 +16,7 @@ export default {
             return '747015697@qq.com'
         },
         get pass() {    // qq邮箱生成授权码
-            return 'xmblblmncshpbfjb'
+            return '123'
         },
         get code() {    // 生成验证码
             return () => {

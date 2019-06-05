@@ -22,4 +22,9 @@
     该组件只适用于在布局中显示页面组件（即非布局内容）
 12.layout 属性
     layouts 根目录下的所有文件都属于个性化布局文件，可以在页面组件中利用 layout 属性来引用。默认值 'default'
-    
+13.robo3t 无法使用 mongoimport 导入数据，collection 右键 create c 后右键 insert d，复制数据后运行
+14.接口签名 访问线上数据 http:cp-tools.cn/sign
+15.获取当前城市 异步更改dom 或 ssr 服务端渲染拿到接口值返回页面
+16.出现 timeout of 2000ms exceeded； 结构赋值 count 参数未定义 检查少 await
+17.vscode 本地调试 ①依次点击 debug、设置 按钮，选择 chrom 模式 ;绿色按钮启动;chrom 还要安装 vue-devtools 插件
+    2.安装 npm install -g live-server ,packagejson 添加 serve 终端启动 live-server
