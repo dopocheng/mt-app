@@ -19,6 +19,10 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+// 本地调试
+  configureWebpack: {
+    devtool: 'source-map'
+  },
 
   /*
   ** Customize the progress-bar color
